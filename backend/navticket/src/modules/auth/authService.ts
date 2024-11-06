@@ -35,5 +35,13 @@ export class AuthService{
         if (error) throw new Error(error.message);
         return { message: 'Logged out successfully' };
       }
+
+
+    
+    // Company auth service
+
+    
+
+    
     
 }
