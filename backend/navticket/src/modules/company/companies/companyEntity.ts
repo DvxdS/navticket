@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Routes } from '../routes/routeEntity';
 @Entity()
 export class Company {
   @PrimaryGeneratedColumn('uuid')
@@ -17,6 +17,9 @@ export class Company {
   @Column()
   numberOfBusesStandard: number;
 
+  @Column()
+  email: string;
+
   @Column({ nullable: true })
   contactInfo: string;
 
@@ -28,4 +31,7 @@ export class Company {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Routes, (route) => route.company)
+  routes: Routes[];
 }
