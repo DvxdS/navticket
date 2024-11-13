@@ -7,25 +7,23 @@ export class Routes {
   id: number;
 
   @Column({ length: 100 })
-  origin: string;  // Starting point of the route
+  origin: string;  
 
   @Column({ length: 100 })
-  destination: string;  // Ending point of the route
+  destination: string;  
 
   @Column('float')
-  price: number;  // Ticket price for the route
+  price: number;  
 
-  @Column({ type: 'time' })
-  departureTime: string;  // Departure time
-
-  @Column({ type: 'time' })
-  arrivalTime: string;  // Estimated arrival time
+  @Column('float')
+  distance
+  
 
   @ManyToOne(() => Company, (company) => company.routes, { eager: true })
-  company: Company;  // The bus company offering this route
+  company: Company;  
 
   @Column('int')
-  availableSeats: number;  // Number of available seats for booking
+  availableSeats: number; 
 
   @CreateDateColumn()
   createdAt: Date;

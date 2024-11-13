@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsNumber, IsNotEmpty, IsTimeString } from 'class-validator';
+import { IsString, IsInt, IsNumber, IsNotEmpty, isNumber,   } from 'class-validator';
 
 export class CreateRouteDto {
   @IsString()
@@ -13,11 +13,11 @@ export class CreateRouteDto {
   @IsNotEmpty()
   price: number;
 
-  @IsTimeString()
-  departureTime: string;
-
-  @IsTimeString()
-  arrivalTime: string;
+  @IsNumber()
+  @IsNotEmpty()
+  distance : number;
+  
+  
 
   @IsInt()
   @IsNotEmpty()
@@ -25,5 +25,5 @@ export class CreateRouteDto {
 
   @IsInt()
   @IsNotEmpty()
-  companyId: number;  // This will represent the ID of the associated company
+  companyId: string;  // This will represent the ID of the associated company
 }
