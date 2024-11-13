@@ -17,7 +17,7 @@ export class Company {
   @Column()
   numberOfBusesStandard: number;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
   @Column({ nullable: true })

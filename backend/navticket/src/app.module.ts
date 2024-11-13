@@ -4,14 +4,12 @@ import { Company } from './modules/company/companies/companyEntity';
 import { CompanyModule } from './modules/company/companies/companiesModule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-console.log({
-  url : process.env.SUPABASE_URL,
-  host: process.env.SUPABASE_DB_HOST,
-  port: process.env.SUPABASE_DB_PORT,
-  username: process.env.SUPABASE_DB_USERNAME,
-  password: process.env.SUPABASE_DB_PASSWORD,
-  database: process.env.SUPABASE_DB_NAME,
-});
+import { Routes } from './modules/company/routes/routeEntity';
+import { RouteModule } from './modules/company/routes/routeModule';
+import { Schedule } from './modules/company/schedule/scheduleEntity';
+import { ScheduleModule } from './modules/company/schedule/scheduleModule';
+
+
 
 
 @Module({
@@ -23,12 +21,14 @@ console.log({
       username: 'postgres.xootvwbijtuuyarazfvp',
       password: '6NMRY0Um8IYmJxXF',
       database: 'postgres',
-      entities : [Company],
+      entities : [Company, Routes, Schedule],
       synchronize: true
     }),
 
     CompanyModule,
-    TypeOrmModule.forFeature([Company]),
+    RouteModule,
+    ScheduleModule,
+    TypeOrmModule.forFeature([Company, Routes, Schedule]),
   ],
   controllers: [AppController],
   providers: [AppService],
