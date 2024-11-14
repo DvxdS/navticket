@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { FaDownload, FaTimes, FaBars } from 'react-icons/fa';
 import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
 import Button from '../../components/3dbutton';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
   const [active, setActive] = useState('');
   const [toggle, setToggle] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setActive(window.location.pathname);
@@ -71,12 +73,15 @@ function Navbar() {
         </ul>
         <ul className='flex items-center mr-4'>
             <li className='mr-4'>
-                <button className='text-lg font-bold'>
+                <button className='text-lg font-bold'
+                 onClick={() => navigate('/login')}>
                     Login
                 </button>
                 
             </li>
             <li className='mr-4'>
+              
+
                 <Button/>
                     
             </li>
