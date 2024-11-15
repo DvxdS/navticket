@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 function Pricing() {
+
+  const navigate = useNavigate()
     return (
       <div className="w-full h-auto bg-white px-4 sm:px-6 lg:px-8 mt-10">
         <div className="w-full max-w-6xl mx-auto">
@@ -8,7 +12,8 @@ function Pricing() {
   
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Basic Plan */}
-            <div className="bg-sky-50 rounded-lg shadow-md p-5 flex flex-col flex-1 mx-6 transition duration-300 hover:border-2 hover:border-blue-600">
+            <div className="bg-sky-50 rounded-lg shadow-md p-5 flex flex-col flex-1 mx-6 transition duration-300 hover:border-2 hover:border-blue-600"
+            id='basic'>
               <h3 className="text-lg font-semibold mb-3">Basic</h3>
               <p className="text-gray-600 mb-3">Plan de base</p>
               <p className="text-3xl font-bold mb-5">
@@ -29,13 +34,15 @@ function Pricing() {
                   Assistance de base
                 </li>
               </ul>
-              <button className="bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition duration-300">
+              <button className="bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition duration-300"
+              onClick={() => navigate('/auth')}>
                 Choisir Plan
               </button>
             </div>
   
             {/* Pro Plan */}
-            <div className="bg-sky-50 rounded-lg shadow-md p-5 flex flex-col flex-1 mx-6 transition duration-300 hover:border-2 hover:border-blue-600">
+            <div className="bg-sky-50 rounded-lg shadow-md p-5 flex flex-col flex-1 mx-6 transition duration-300 hover:border-2 hover:border-blue-600"
+            id='pro'>
               <h3 className="text-lg font-semibold mb-3">Pro</h3>
               <p className="text-gray-600 mb-3">Support Business</p>
               <p className="text-3xl font-bold mb-5">
@@ -68,13 +75,15 @@ function Pricing() {
                   Outils Analytics avancées
                 </li>
               </ul>
-              <button className="bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition duration-300">
+              <button className="bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition duration-300"
+              onClick={() => navigate('/auth')}>
                 Choisir Plan
               </button>
             </div>
   
             {/* Elite Plan */}
-            <div className="bg-sky-50 rounded-lg shadow-md p-5 flex flex-col flex-1 mx-6 transition duration-300 hover:border-2 hover:border-blue-600">
+            <div className="bg-sky-50 rounded-lg shadow-md p-5 flex flex-col flex-1 mx-6 transition duration-300 hover:border-2 hover:border-blue-600"
+            id='elite'>
               <h3 className="text-lg font-semibold mb-3">Elite</h3>
               <p className="text-gray-600 mb-3">Pour Operations & </p>
               <p className="text-3xl font-bold mb-5">

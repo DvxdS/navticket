@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FaGoogle, FaArrowRight, FaUserPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../landingPage/navbar';
 
 
 function SignUpForm() {
@@ -29,7 +30,10 @@ function SignUpForm() {
   });
 
   return (
+
+    
     <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
+
       <h1 className="text-4xl font-medium">Créez un compte</h1>
       <p className="text-slate-500">Bienvenue! Commencez par ici</p>
 
