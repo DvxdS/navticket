@@ -1,6 +1,7 @@
 import { FaGoogle, FaArrowRight, FaUserPlus } from 'react-icons/fa';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { AuthService } from '../../services/auth'; // Ensure the correct path to AuthService
 
 const LoginForm: React.FC = () => {
   const formik = useFormik({
@@ -13,9 +14,16 @@ const LoginForm: React.FC = () => {
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string().min(8, 'Password must be at least 8 characters').required('Required'),
     }),
-    onSubmit: (values) => {
-      // Handle login logic here
-      console.log('Form data', values);
+    onSubmit: async (values) => {
+      try {
+        const response = await AuthService.login(values.email, values.password);
+        console.log('Login successful:', response);
+        // Handle success (e.g., redirect or store token)
+        alert('Login successful');
+      } catch (error: any) {
+        console.error('Login failed:', error.message);
+        alert(error.message); // Display error to user
+      }
     },
   });
 

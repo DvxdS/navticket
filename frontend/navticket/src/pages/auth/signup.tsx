@@ -2,10 +2,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FaGoogle, FaArrowRight, FaUserPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../landingPage/navbar';
+import { AuthService } from '../../services/auth'; // Adjust the import based on your file structure
 
-
-function SignUpForm() {
+const SignUpForm: React.FC = () => {
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -22,29 +21,36 @@ function SignUpForm() {
         .oneOf([Yup.ref('password')], 'Passwords must match')
         .required('Required'),
     }),
-    onSubmit: (values) => {
-      // Handle sign-up logic here
-      console.log('Sign Up:', values);
-      navigate('/'); // Navigate to homepage or a different route after signup
+    onSubmit: async (values) => {
+      try {
+        const result = await AuthService.signUp(values.email, values.password);
+        console.log('Registration successful:', result);
+        navigate('/dashboard'); // Redirect to the dashboard or desired page
+      } catch (error) {
+        console.error('Registration failed:', error);
+        // Handle error (e.g., display a notification)
+      }
     },
   });
 
   return (
-
-    
     <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
-
       <h1 className="text-4xl font-medium">Créez un compte</h1>
       <p className="text-slate-500">Bienvenue! Commencez par ici</p>
 
       <div className="my-5">
-        <button className="w-full text-center py-3 my-3 border flex space-x-2 items-center justify-center border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150">
+        <button
+          type="button"
+          className="w-full text-center py-3 my-3 border flex space-x-2 items-center justify-center border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
+          // Google OAuth logic
+        >
           <FaGoogle className="w-6 h-6" /> <span>Connectez-vous avec Google</span>
         </button>
       </div>
 
       <form onSubmit={formik.handleSubmit} className="my-10">
         <div className="flex flex-col space-y-5">
+          {/* Email Field */}
           <label htmlFor="email">
             <p className="font-medium text-slate-700 pb-2">Email addresse</p>
             <input
@@ -57,11 +63,12 @@ function SignUpForm() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
-            {formik.touched.email && formik.errors.email ? (
+            {formik.touched.email && formik.errors.email && (
               <div className="text-red-500 text-sm">{formik.errors.email}</div>
-            ) : null}
+            )}
           </label>
 
+          {/* Password Field */}
           <label htmlFor="password">
             <p className="font-medium text-slate-700 pb-2">Mot de passe</p>
             <input
@@ -74,11 +81,12 @@ function SignUpForm() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
-            {formik.touched.password && formik.errors.password ? (
+            {formik.touched.password && formik.errors.password && (
               <div className="text-red-500 text-sm">{formik.errors.password}</div>
-            ) : null}
+            )}
           </label>
 
+          {/* Confirm Password Field */}
           <label htmlFor="confirmPassword">
             <p className="font-medium text-slate-700 pb-2">Confirmez mot de passe</p>
             <input
@@ -91,11 +99,12 @@ function SignUpForm() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
-            {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
               <div className="text-red-500 text-sm">{formik.errors.confirmPassword}</div>
-            ) : null}
+            )}
           </label>
 
+          {/* Remember Me */}
           <div className="flex flex-row justify-between">
             <label htmlFor="rememberMe" className="flex items-center">
               <input
@@ -109,6 +118,7 @@ function SignUpForm() {
             </label>
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full py-3 font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg border-indigo-500 hover:shadow flex space-x-2 items-center justify-center"
@@ -116,9 +126,14 @@ function SignUpForm() {
             <FaArrowRight className="h-6 w-6" />
             <span>Créez compte</span>
           </button>
+
+          {/* Already have an account */}
           <p className="text-center">
-            Déja un compte?{' '}
-            <a href="/login" className="text-indigo-600 font-medium inline-flex space-x-1 items-center">
+            Déjà un compte?{' '}
+            <a
+              href="/login"
+              className="text-indigo-600 font-medium inline-flex space-x-1 items-center"
+            >
               <span>Connectez-vous</span>
               <FaUserPlus className="h-4 w-4" />
             </a>
@@ -127,6 +142,6 @@ function SignUpForm() {
       </form>
     </div>
   );
-}
+};
 
 export default SignUpForm;
