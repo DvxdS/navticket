@@ -24,6 +24,9 @@ export class CreateCompanyDto {
   @IsString()
   officeLocation?: string;
 
+  @IsString()
+  plan : string;
+
   @IsEmail()
   email: string;
 

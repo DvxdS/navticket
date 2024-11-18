@@ -8,7 +8,8 @@ import { Routes } from './modules/company/routes/routeEntity';
 import { RouteModule } from './modules/company/routes/routeModule';
 import { Schedule } from './modules/company/schedule/scheduleEntity';
 import { ScheduleModule } from './modules/company/schedule/scheduleModule';
-
+import { BusType } from './modules/company/bus/busEntity';
+import { AuthModule } from './modules/auth/authModule';
 
 
 
@@ -21,10 +22,10 @@ import { ScheduleModule } from './modules/company/schedule/scheduleModule';
       username: 'postgres.xootvwbijtuuyarazfvp',
       password: '6NMRY0Um8IYmJxXF',
       database: 'postgres',
-      entities : [Company, Routes, Schedule],
+      entities : [Company, Routes, Schedule, BusType],
       synchronize: true
     }),
-
+    AuthModule,
     CompanyModule,
     RouteModule,
     ScheduleModule,

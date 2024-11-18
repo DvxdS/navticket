@@ -26,6 +26,9 @@ export class Company {
   @Column({ nullable: true })
   officeLocation: string;
 
+  @ Column()
+  plan : string;
+
   @CreateDateColumn()
   createdAt: Date;
 

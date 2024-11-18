@@ -23,7 +23,7 @@ const AuthForm: React.FC = () => {
       onSubmit: (values) => {
         // Handle sign-up logic here
         console.log('Sign Up:', values);
-        navigate('/'); // Navigate to homepage or a different route after signup
+        navigate('/stepper'); // Navigate to homepage or a different route after signup
       },
     });
   
@@ -108,6 +108,7 @@ const AuthForm: React.FC = () => {
             </div>
   
             <button
+            
               type="submit"
               className="w-full py-3 font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg border-indigo-500 hover:shadow flex space-x-2 items-center justify-center"
             >
@@ -116,7 +117,7 @@ const AuthForm: React.FC = () => {
             </button>
             <p className="text-center">
               Déja un compte?{' '}
-              <a href="/login" className="text-indigo-600 font-medium inline-flex space-x-1 items-center">
+              <a href="/companylogin" className="text-indigo-600 font-medium inline-flex space-x-1 items-center">
                 <span>Connectez-vous</span>
                 <FaUserPlus className="h-4 w-4" />
               </a>
