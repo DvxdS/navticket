@@ -18,8 +18,7 @@ const StepperExample = () => {
     switch (step) {
       case 0: return <div>Plan Selection Content</div>;
       case 1: return <div>Company Details Content</div>;
-      case 2: return <div>Routes Content</div>;
-      case 3: return <div>Schedules Content</div>;
+      
       default: return null;
     }
   };
