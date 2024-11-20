@@ -1,6 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate,  } from "react-router-dom";
+import { useState } from "react";
 
 function Pricing() {
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const handleSelectPlan = (plan: string) => {
+    setSelectedPlan(plan);
+    // Optionally, navigate or trigger a callback to save the choice.
+  };
 
   const navigate = useNavigate()
     return (
