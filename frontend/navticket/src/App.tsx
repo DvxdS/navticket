@@ -9,6 +9,7 @@ import AuthForm from './pages/auth/companyAuth';
 import CompanyLogin from './pages/auth/comapnyLogin';
 import StepperExample from './components/companyRegistration/test';
 
+
 function App() {
   
 
@@ -21,6 +22,9 @@ function App() {
         <Route path ="/auth" element={<AuthForm/>}/>
         <Route path ="/companylogin" element={<CompanyLogin/>}/>
         <Route path ="/stepper" element={<StepperExample/>}/>
+        
+
+
 
 
 
