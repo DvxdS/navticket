@@ -5,14 +5,15 @@ import { useFormContext } from "../../../context/FormContext";
 
 interface CompanyStepProps {
   goNext: () => void;
+  goBack: () => void;
 }
 
-const CompanyStep: React.FC<CompanyStepProps> = ({ goNext }) => {
+const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
   const { updateFormData } = useFormContext();
 
   const formik = useFormik({
     initialValues: {
-      companyName: "",
+      name: "",
       officialDocs: null,
       numberOfBusesVip: "",
       numberOfBusesStandard: "",
@@ -21,31 +22,35 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext }) => {
       officeLocation: "",
     },
     validationSchema: Yup.object({
-      companyName: Yup.string().required("Nom de l'entreprise est requis."),
+      name: Yup.string().required("Nom de l'entreprise est requis."),
       officialDocs: Yup.mixed()
         .required("Document officiel est requis.")
         .test("fileType", "Format non supporté (PDF ou Word uniquement)", (value) => {
-          if (!value) return false; // Ensure value is present
-          const file = value as File; // Explicitly cast to File
-          return ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(file.type);
+          if (!value) return false;
+          const file = value as File;
+          return [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          ].includes(file.type);
         }),
-      vipBusCount: Yup.number()
+      numberOfBusesVip: Yup.number()
         .typeError("Nombre de bus VIP doit être un nombre.")
         .min(0, "Nombre de bus VIP ne peut pas être négatif.")
         .required("Nombre de bus VIP est requis."),
-      standardBusCount: Yup.number()
+      numberOfBusesStandard: Yup.number()
         .typeError("Nombre de bus standards doit être un nombre.")
         .min(0, "Nombre de bus standards ne peut pas être négatif.")
         .required("Nombre de bus standards est requis."),
       email: Yup.string().email("Email invalide.").required("Email est requis."),
-      phone: Yup.string()
+      contactInfo: Yup.string()
         .matches(/^\+?[0-9]{10,15}$/, "Numéro de téléphone invalide.")
         .required("Numéro de téléphone est requis."),
-      location: Yup.string().required("Localisation de l'office est requise."),
+      officeLocation: Yup.string().required("Localisation de l'office est requise."),
     }),
     onSubmit: (values) => {
-      updateFormData("companyDetails", values); // Save data to context
-      goNext(); // Move to the next step
+      updateFormData("companyDetails", values);
+      goNext();
     },
   });
 
@@ -59,19 +64,19 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext }) => {
         <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Company Name */}
           <div className="sm:col-span-2">
-            <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
               Nom de l'entreprise
             </label>
             <input
-              id="companyName"
+              id="name"
               type="text"
-              {...formik.getFieldProps("companyName")}
+              {...formik.getFieldProps("name")}
               className={`mt-1 block w-full rounded-md border ${
-                formik.touched.companyName && formik.errors.companyName ? "border-red-500" : "border-gray-300"
+                formik.touched.name && formik.errors.name ? "border-red-500" : "border-gray-300"
               } focus:ring-blue-500 focus:border-blue-500`}
             />
-            {formik.touched.companyName && formik.errors.companyName && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.companyName}</p>
+            {formik.touched.name && formik.errors.name && (
+              <p className="text-red-500 text-sm mt-1">{formik.errors.name}</p>
             )}
           </div>
 
@@ -98,36 +103,40 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext }) => {
 
           {/* VIP Bus Count */}
           <div>
-            <label htmlFor=" numberOfBusesVip" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="numberOfBusesVip" className="block text-sm font-medium text-gray-700">
               Nombre de bus VIP
             </label>
             <input
-              id=" numberOfBusesVip"
+              id="numberOfBusesVip"
               type="number"
-              {...formik.getFieldProps("vipBusCount")}
+              {...formik.getFieldProps("numberOfBusesVip")}
               className={`mt-1 block w-full rounded-md border ${
-                formik.touched. numberOfBusesVip && formik.errors. numberOfBusesVip ? "border-red-500" : "border-gray-300"
+                formik.touched.numberOfBusesVip && formik.errors.numberOfBusesVip
+                  ? "border-red-500"
+                  : "border-gray-300"
               } focus:ring-blue-500 focus:border-blue-500`}
             />
-            {formik.touched. numberOfBusesVip && formik.errors. numberOfBusesVip && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors. numberOfBusesVip}</p>
+            {formik.touched.numberOfBusesVip && formik.errors.numberOfBusesVip && (
+              <p className="text-red-500 text-sm mt-1">{formik.errors.numberOfBusesVip}</p>
             )}
           </div>
 
           {/* Standard Bus Count */}
           <div>
-            <label htmlFor="standardBusCount" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="numberOfBusesStandard" className="block text-sm font-medium text-gray-700">
               Nombre de bus standards
             </label>
             <input
-              id="standardBusCount"
+              id="numberOfBusesStandard"
               type="number"
-              {...formik.getFieldProps("standardBusCount")}
+              {...formik.getFieldProps("numberOfBusesStandard")}
               className={`mt-1 block w-full rounded-md border ${
-                formik.touched.numberOfBusesStandard && formik.errors.numberOfBusesStandard ? "border-red-500" : "border-gray-300"
+                formik.touched.numberOfBusesStandard && formik.errors.numberOfBusesStandard
+                  ? "border-red-500"
+                  : "border-gray-300"
               } focus:ring-blue-500 focus:border-blue-500`}
             />
-            {formik.touched.numberOfBusesStandard && formik.errors.numberOfBusesStandard&& (
+            {formik.touched.numberOfBusesStandard && formik.errors.numberOfBusesStandard && (
               <p className="text-red-500 text-sm mt-1">{formik.errors.numberOfBusesStandard}</p>
             )}
           </div>
@@ -150,17 +159,19 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext }) => {
             )}
           </div>
 
-          {/* Phone */}
+          {/* Contact Info */}
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="contactInfo" className="block text-sm font-medium text-gray-700">
               Téléphone
             </label>
             <input
-              id="phone"
+              id="contactInfo"
               type="text"
-              {...formik.getFieldProps("phone")}
+              {...formik.getFieldProps("contactInfo")}
               className={`mt-1 block w-full rounded-md border ${
-                formik.touched.contactInfo && formik.errors.contactInfo ? "border-red-500" : "border-gray-300"
+                formik.touched.contactInfo && formik.errors.contactInfo
+                  ? "border-red-500"
+                  : "border-gray-300"
               } focus:ring-blue-500 focus:border-blue-500`}
             />
             {formik.touched.contactInfo && formik.errors.contactInfo && (
@@ -170,15 +181,17 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext }) => {
 
           {/* Office Location */}
           <div className="sm:col-span-2">
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="officeLocation" className="block text-sm font-medium text-gray-700">
               Localisation de l'office
             </label>
             <input
-              id="location"
+              id="officeLocation"
               type="text"
-              {...formik.getFieldProps("location")}
+              {...formik.getFieldProps("officeLocation")}
               className={`mt-1 block w-full rounded-md border ${
-                formik.touched.officeLocation && formik.errors.officeLocation ? "border-red-500" : "border-gray-300"
+                formik.touched.officeLocation && formik.errors.officeLocation
+                  ? "border-red-500"
+                  : "border-gray-300"
               } focus:ring-blue-500 focus:border-blue-500`}
             />
             {formik.touched.officeLocation && formik.errors.officeLocation && (
@@ -186,8 +199,15 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext }) => {
             )}
           </div>
 
-          {/* Submit Button */}
-          <div className="sm:col-span-2 text-center mt-6">
+          {/* Navigation Buttons */}
+          <div className="sm:col-span-2 flex justify-between mt-6">
+            <button
+              type="button"
+              onClick={goBack}
+              className="py-3 px-6 rounded-md text-white bg-gray-600 hover:bg-gray-700 transition duration-300"
+            >
+              Retour
+            </button>
             <button
               type="submit"
               className={`py-3 px-6 rounded-md text-white transition duration-300 ${

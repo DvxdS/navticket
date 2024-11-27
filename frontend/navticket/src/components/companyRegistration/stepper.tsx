@@ -43,22 +43,7 @@ const Stepper: React.FC<StepperProps> = ({ steps, currentStep, onNext, onPreviou
           </li>
         ))}
       </ol>
-      <div className="flex items-center justify-between w-full mt-4">
-        <button
-          onClick={onPrevious}
-          disabled={currentStep === 0}
-          className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-lg disabled:opacity-50 hover:bg-gray-300"
-        >
-          Back
-        </button>
-        <button
-          onClick={onNext}
-          disabled={currentStep === steps.length - 1}
-          className="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+      
     </div>
   );
 };

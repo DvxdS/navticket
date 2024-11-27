@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useFormContext } from "../../../context/FormContext";
 
 interface RoutesStepProps {
   goNext: () => void;
+  goBack: () => void;
 }
 
-const RoutesStep: React.FC<RoutesStepProps> = ({ goNext }) => {
+const RoutesStep: React.FC<RoutesStepProps> = ({ goNext, goBack }) => {
   const { updateFormData } = useFormContext();
+  const [savedRoutes, setSavedRoutes] = useState<any[]>([]);
 
+  // Formik setup for form validation and handling
   const formik = useFormik({
     initialValues: {
       origin: "",
@@ -32,8 +35,10 @@ const RoutesStep: React.FC<RoutesStepProps> = ({ goNext }) => {
         .min(1, "Distance doit être positive."),
     }),
     onSubmit: (values) => {
-      updateFormData("routes", values); // Save the route details in context
-      goNext(); // Move to the next step
+      // Save the route details in context and add it to savedRoutes
+      setSavedRoutes((prevRoutes) => [...prevRoutes, values]);
+      updateFormData("routes", values); // Optional: Save the route in context
+      formik.resetForm(); // Reset the form for adding new routes
     },
   });
 
@@ -41,6 +46,8 @@ const RoutesStep: React.FC<RoutesStepProps> = ({ goNext }) => {
     <div className="w-full h-auto bg-white px-4 sm:px-6 lg:px-8 mt-10">
       <div className="w-full max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-6">Créer une Route</h2>
+
+        {/* Route Form */}
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           {/* Origin */}
           <div>
@@ -152,16 +159,72 @@ const RoutesStep: React.FC<RoutesStepProps> = ({ goNext }) => {
             )}
           </div>
 
-          {/* Continue Button */}
-          <div className="text-center">
+          {/* Buttons */}
+          <div className="flex justify-between">
+            {/* Save and Add Another Route */}
             <button
               type="submit"
               className="py-3 px-6 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition duration-300"
             >
-              Continuer
+              Sauvegarder la Route
+            </button>
+            <button
+              type="button"
+              onClick={() => formik.resetForm()}
+              className="py-3 px-6 rounded-md bg-gray-600 text-white hover:bg-gray-700 transition duration-300"
+            >
+              Ajouter une autre Route
             </button>
           </div>
         </form>
+
+        {/* Summary of Saved Routes */}
+        {savedRoutes.length > 0 && (
+          <div className="mt-8">
+            <h3 className="text-xl font-semibold mb-4">Routes Enregistrées:</h3>
+            <div className="space-y-4">
+              {savedRoutes.map((route, index) => (
+                <div
+                  key={index}
+                  className="p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-lg transition duration-300"
+                >
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-lg font-semibold text-blue-600">
+                      {route.origin} → {route.destination}
+                    </h4>
+                    <span className="text-sm text-gray-500">{route.price} XOF</span>
+                  </div>
+                  <div className="mt-2 text-sm text-gray-600">
+                    <p>
+                      <strong>Distance:</strong> {route.distance} km
+                    </p>
+                  </div>
+                  <div className="mt-2 text-sm text-gray-600">
+                    <p>
+                      <strong>Prix:</strong> {route.price} XOF
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Navigation Buttons */}
+        <div className="mt-6 flex justify-between">
+          <button
+            onClick={goBack}
+            className="py-3 px-6 rounded-md bg-gray-400 text-white hover:bg-gray-500 transition duration-300"
+          >
+            Retour
+          </button>
+          <button
+            onClick={goNext}
+            className="py-3 px-6 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition duration-300"
+          >
+            Suivant
+          </button>
+        </div>
       </div>
     </div>
   );
