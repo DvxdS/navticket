@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { 
+  Entity, 
+  PrimaryGeneratedColumn, 
+  Column, 
+  ManyToOne, 
+  CreateDateColumn, 
+  UpdateDateColumn 
+} from 'typeorm';
 import { Routes } from "../routes/routeEntity";
 import { BusType } from "../bus/busEntity";
 
@@ -14,11 +21,17 @@ export class Schedule {
   busType: BusType;
 
   @Column('time')
-  departureTime: string; 
+  departureTime: string;
 
   @Column('time', { nullable: true })
-  arrivalTime: string; 
+  arrivalTime: string;
 
+  @Column('uuid', { default: () => 'uuid_generate_v4()' })
+  scheduleGroup: string; // To group schedules for the same route
+
+
+  @Column('int', { nullable: true })
+  durationInHour: number; // Optional explicit travel duration
 
   @CreateDateColumn()
   createdAt: Date;

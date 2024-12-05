@@ -3,7 +3,7 @@ import Stepper from "./stepper";
 import PlanStep from "./setps/planStep";
 import CompanyStep from "./setps/companyStep";
 import RoutesStep from "./setps/routeStep";
-import SchedulesStep from "./steps/SchedulesStep";
+import ScheduleStep from './setps/scheduleStep'
 import { useFormContext } from "../../context/FormContext";
 
 const steps = ["Select Plan", "Company Details", "Routes", "Schedules"];
@@ -29,7 +29,7 @@ const CompanyRegistrationForm: React.FC = () => {
       case 2:
         return <RoutesStep goNext={goNext} goBack={goBack} />;
       case 3:
-        return <SchedulesStep goBack={goBack} handleSubmit={handleSubmit} />;
+        return <ScheduleStep goBack={goBack} goNext={goNext} />;
       default:
         return null;
     }
@@ -37,7 +37,11 @@ const CompanyRegistrationForm: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <Stepper steps={steps} currentStep={currentStep} />
+      <Stepper 
+      steps={steps} 
+      currentStep={currentStep} 
+      onNext={goNext} 
+      onPrevious={goBack}  />
       <div className="bg-white p-6 shadow rounded">{renderStep()}</div>
     </div>
   );
