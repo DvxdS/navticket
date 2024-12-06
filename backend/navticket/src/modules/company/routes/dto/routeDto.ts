@@ -11,7 +11,10 @@ export class CreateRouteDto {
 
   @IsNumber()
   @IsNotEmpty()
-  price: number;
+  priceStandard: number;
+
+  @IsNumber()
+  priceVIP : number;
 
   @IsNumber()
   @IsNotEmpty()

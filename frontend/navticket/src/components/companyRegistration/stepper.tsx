@@ -1,49 +1,63 @@
-import React from 'react';
-import { FaRegCheckCircle, FaRegBuilding, FaRegMap, FaRegCalendarAlt } from 'react-icons/fa';
+import React from "react";
+import { FaCheckCircle, FaRegBuilding, FaRegMap, FaRegCalendarAlt, FaRegClipboard } from "react-icons/fa";
 
 interface StepperProps {
   steps: string[];
   currentStep: number;
-  onNext: () => void;
-  onPrevious: () => void;
 }
 
-const Stepper: React.FC<StepperProps> = ({ steps, currentStep, onNext, onPrevious }) => {
+const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
   const stepIcons = [
-    <FaRegCheckCircle />,
+    <FaCheckCircle />,
     <FaRegBuilding />,
     <FaRegMap />,
     <FaRegCalendarAlt />,
+    <FaRegClipboard />, // New Review Icon
   ];
 
   return (
-    <div className="flex flex-col items-center w-full max-w-md mx-auto">
-      <ol className="relative border-l border-gray-300">
+    <div className="w-full max-w-4xl mx-auto">
+      {/* Keep horizontal layout on all screen sizes, but reduce size on small screens */}
+      <div className="flex flex-row justify-between items-center space-x-4 sm:space-x-6">
         {steps.map((step, index) => (
-          <li key={index} className="mb-10 ml-6">
+          <div key={index} className="flex flex-col items-center sm:items-start">
+            {/* Icon Container */}
             <div
-              className={`absolute -left-4 flex items-center justify-center w-8 h-8 rounded-full ring-4 
+              className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full ring-4 mb-2
                 ${index < currentStep
-                  ? 'bg-green-500 text-white ring-green-300'
+                  ? "bg-green-500 text-white ring-green-300" // Completed step
                   : index === currentStep
-                  ? 'bg-blue-500 text-white ring-blue-300'
-                  : 'bg-gray-300 text-gray-500 ring-gray-200'
+                  ? "bg-blue-500 text-white ring-blue-300" // Current step
+                  : "bg-gray-300 text-gray-500 ring-gray-200" // Upcoming step
                 }`}
             >
-              {stepIcons[index]}
+              {index < currentStep ? <FaCheckCircle /> : stepIcons[index]}
             </div>
+
+            {/* Step Title */}
             <h3
-              className={`font-medium leading-tight ${
-                index <= currentStep ? 'text-black' : 'text-gray-400'
+              className={`text-xs sm:text-sm font-medium text-center sm:text-left ${
+                index < currentStep
+                  ? "text-green-600" // Completed step text
+                  : index === currentStep
+                  ? "text-blue-600" // Current step text
+                  : "text-gray-500" // Upcoming step text
               }`}
             >
               {step}
             </h3>
-            <p className="text-sm text-gray-500">Step details here</p>
-          </li>
+
+            {/* Connector Line */}
+            {index < steps.length - 1 && (
+              <div
+                className={`h-1 sm:h-1.5 w-10 sm:w-16 bg-gray-300 mt-2 sm:mt-4 ${
+                  index < currentStep ? "bg-green-500" : ""
+                }`}
+              ></div>
+            )}
+          </div>
         ))}
-      </ol>
-      
+      </div>
     </div>
   );
 };

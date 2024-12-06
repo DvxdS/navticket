@@ -13,8 +13,11 @@ export class Routes {
   @Column({ length: 100 })
   destination: string;  
 
+  @Column('float', {nullable : true})
+  priceVIP: number;  
+
   @Column('float')
-  price: number;  
+  priceStandard
 
   @Column('float')
   distance

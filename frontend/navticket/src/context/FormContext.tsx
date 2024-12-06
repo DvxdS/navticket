@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface FormState {
   plan: string;
-  companyDetails: Record<string, any>;
+  companyDetails: { plan: string; [key: string]: any } // Ensure plan is part of companyDetails
   routes: any[];
   schedules: any[];
 }
@@ -14,17 +14,24 @@ interface FormContextValue {
 
 const FormContext = createContext<FormContextValue | undefined>(undefined);
 
-
 export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [formData, setFormData] = useState<FormState>({
     plan: "",
-    companyDetails: {},
+    companyDetails: { plan: "" },
     routes: [],
     schedules: [],
   });
 
   const updateFormData = (key: string, value: any) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+    if (key === "plan") {
+      setFormData((prev) => ({
+        ...prev,
+        plan: value,
+        companyDetails: { ...prev.companyDetails, plan: value } // Sync plan to companyDetails
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [key]: value }));
+    }
   };
 
   return (
@@ -33,7 +40,6 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     </FormContext.Provider>
   );
 };
-
 
 export const useFormContext = () => {
   const context = useContext(FormContext);

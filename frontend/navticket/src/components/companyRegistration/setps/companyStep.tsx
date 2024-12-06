@@ -9,6 +9,7 @@ interface CompanyStepProps {
 }
 
 const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
+  console.log("coppany rendered ")
   const { updateFormData } = useFormContext();
 
   const formik = useFormik({
@@ -71,7 +72,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
               id="name"
               type="text"
               {...formik.getFieldProps("name")}
-              className={`mt-1 block w-full rounded-md border ${
+              className={`mt-1 block w-full py-2 px-3  rounded-md border bg-gray-50 ${
                 formik.touched.name && formik.errors.name ? "border-red-500" : "border-gray-300"
               } focus:ring-blue-500 focus:border-blue-500`}
             />
@@ -94,7 +95,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
                   formik.setFieldValue("officialDocs", event.currentTarget.files[0]);
                 }
               }}
-              className="mt-1 block w-full"
+              className="mt-1 block w-full "
             />
             {formik.touched.officialDocs && formik.errors.officialDocs && (
               <p className="text-red-500 text-sm mt-1">{formik.errors.officialDocs}</p>
@@ -110,7 +111,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
               id="numberOfBusesVip"
               type="number"
               {...formik.getFieldProps("numberOfBusesVip")}
-              className={`mt-1 block w-full rounded-md border ${
+              className={`mt-1 block w-full rounded-md border bg-gray-50 ${
                 formik.touched.numberOfBusesVip && formik.errors.numberOfBusesVip
                   ? "border-red-500"
                   : "border-gray-300"
@@ -130,7 +131,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
               id="numberOfBusesStandard"
               type="number"
               {...formik.getFieldProps("numberOfBusesStandard")}
-              className={`mt-1 block w-full rounded-md border ${
+              className={`mt-1 block w-full rounded-md border bg-gray-50 ${
                 formik.touched.numberOfBusesStandard && formik.errors.numberOfBusesStandard
                   ? "border-red-500"
                   : "border-gray-300"
@@ -150,7 +151,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
               id="email"
               type="email"
               {...formik.getFieldProps("email")}
-              className={`mt-1 block w-full rounded-md border ${
+              className={`mt-1 block w-full rounded-md border bg-gray-50 ${
                 formik.touched.email && formik.errors.email ? "border-red-500" : "border-gray-300"
               } focus:ring-blue-500 focus:border-blue-500`}
             />
@@ -168,7 +169,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
               id="contactInfo"
               type="text"
               {...formik.getFieldProps("contactInfo")}
-              className={`mt-1 block w-full rounded-md border ${
+              className={`mt-1 block w-full rounded-md border bg-gray-50 ${
                 formik.touched.contactInfo && formik.errors.contactInfo
                   ? "border-red-500"
                   : "border-gray-300"
@@ -188,7 +189,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
               id="officeLocation"
               type="text"
               {...formik.getFieldProps("officeLocation")}
-              className={`mt-1 block w-full rounded-md border ${
+              className={`mt-1 block w-full rounded-md border bg-gray-50 py-3 px-2 ${
                 formik.touched.officeLocation && formik.errors.officeLocation
                   ? "border-red-500"
                   : "border-gray-300"
