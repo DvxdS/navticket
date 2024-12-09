@@ -59,7 +59,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
     <div className="w-full h-auto bg-white px-4 sm:px-6 lg:px-8 mt-10">
       <div className="w-full max-w-4xl mx-auto">
         <div className="mt-10">
-          <h2 className="text-3xl font-bold text-center mb-8">Informations sur l'entreprise</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">Informations sur la Compagnie</h2>
         </div>
 
         <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">

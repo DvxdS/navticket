@@ -2,13 +2,13 @@ import React from "react";
 import Stepper from "./stepper";
 import { Outlet, useLocation } from "react-router-dom";
 
-const steps = ["Select Plan", "Company Details", "Routes", "Schedules", "Review"];
+const steps = ["Select Plan", "Company Details", "Bus Types", "Routes", "Schedules", "Review"];
 
 const CompanyRegistrationForm: React.FC = () => {
   const location = useLocation();
 
   // Map URL paths to step indices
-  const stepPaths = ["plan", "company", "routes", "schedules", "review"];
+  const stepPaths = ["plan", "company","bus-types", "routes", "schedules", "review"];
 
   const currentStep = stepPaths.indexOf(location.pathname.split("/").pop() || "");
   console.log(currentStep);

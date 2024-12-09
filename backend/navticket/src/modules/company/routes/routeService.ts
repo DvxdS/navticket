@@ -18,7 +18,7 @@ export class RouteService {
 
   // Method to create a new route
   async createRoute(createRouteDto: CreateRouteDto): Promise<Routes> {
-    const { origin, destination, priceVIP,priceStandard, distance, availableSeats, companyId } = createRouteDto;
+    const { origin, destination, priceVIP,priceStandard, distance,  companyId } = createRouteDto;
 
     // Find the company by ID
     const company = await this.companyRepository.findOne({ where: { id: companyId } });
@@ -33,7 +33,6 @@ export class RouteService {
       priceVIP,
       priceStandard,
       distance,
-      availableSeats,
       company,
     });
 

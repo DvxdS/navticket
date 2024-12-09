@@ -20,11 +20,6 @@ export class CreateRouteDto {
   @IsNotEmpty()
   distance : number;
   
-  
-
-  @IsInt()
-  @IsNotEmpty()
-  availableSeats: number;
 
   @IsInt()
   @IsNotEmpty()

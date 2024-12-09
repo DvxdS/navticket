@@ -26,8 +26,6 @@ export class Routes {
   @ManyToOne(() => Company, (company) => company.routes, { eager: true })
   company: Company;  
 
-  @Column('int')
-  availableSeats: number; 
 
   @CreateDateColumn()
   createdAt: Date;

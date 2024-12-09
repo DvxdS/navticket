@@ -31,7 +31,7 @@ const PlanStep: React.FC<PlanStepProps> = ({ goNext }) => {
 
   const handleContinue = () => {
     if (selectedPlan) {
-      updateFormData("plan", selectedPlan);
+      updateFormData("companyDetails", { plan: selectedPlan });
       goNext();
     }
   };

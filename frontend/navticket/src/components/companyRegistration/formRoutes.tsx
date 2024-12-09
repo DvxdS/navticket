@@ -3,6 +3,7 @@ import { Routes, Route, } from "react-router-dom";
 import PlanStep from "./setps/planStep";
 import CompanyStep from "./setps/companyStep";
 import RoutesStep from "./setps/routeStep";
+import BusTypeStep from "./setps/busTypeStep";
 import ScheduleStep from "./setps/scheduleStep";
 import { useNavigate } from "react-router-dom";
 import CompanyRegistrationForm from "./companyRegistrationForm";
@@ -39,15 +40,24 @@ const FormRoutes: React.FC = () => {
                 />
               }
             />
-            <Route
-              path="routes"
-              element={
-                <RoutesStep
-                  goNext={() => goNext("/company-registration/schedules")}
-                  goBack={() => goBack("/company-registration/company")}
-                />
-              }
-            />
+             <Route
+            path="bus-types"
+            element={
+              <BusTypeStep
+                goNext={() => goNext("/company-registration/routes")}
+                goBack={() => goBack("/company-registration/company")}
+              />
+            }
+          />
+          <Route
+            path="routes"
+            element={
+              <RoutesStep
+                goNext={() => goNext("/company-registration/schedules")}
+                goBack={() => goBack("/company-registration/bus-types")}
+              />
+            }
+          />
             <Route
               path="schedules"
               element={

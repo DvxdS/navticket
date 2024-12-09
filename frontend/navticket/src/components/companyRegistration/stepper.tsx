@@ -1,5 +1,12 @@
 import React from "react";
-import { FaCheckCircle, FaRegBuilding, FaRegMap, FaRegCalendarAlt, FaRegClipboard } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaRegBuilding,
+  FaBus,
+  FaRegMap,
+  FaRegCalendarAlt,
+  FaRegClipboard,
+} from "react-icons/fa";
 
 interface StepperProps {
   steps: string[];
@@ -10,14 +17,14 @@ const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
   const stepIcons = [
     <FaCheckCircle />,
     <FaRegBuilding />,
+    <FaBus />, // New Bus Type Icon
     <FaRegMap />,
     <FaRegCalendarAlt />,
-    <FaRegClipboard />, // New Review Icon
+    <FaRegClipboard />,
   ];
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Keep horizontal layout on all screen sizes, but reduce size on small screens */}
       <div className="flex flex-row justify-between items-center space-x-4 sm:space-x-6">
         {steps.map((step, index) => (
           <div key={index} className="flex flex-col items-center sm:items-start">
