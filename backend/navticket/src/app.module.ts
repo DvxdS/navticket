@@ -10,6 +10,7 @@ import { Schedule } from './modules/company/schedule/scheduleEntity';
 import { ScheduleModule } from './modules/company/schedule/scheduleModule';
 import { BusType } from './modules/company/bus/busEntity';
 import { AuthModule } from './modules/auth/authModule';
+import { BusTypeModule } from './modules/company/bus/dto/busModule';
 
 
 
@@ -29,6 +30,7 @@ import { AuthModule } from './modules/auth/authModule';
     CompanyModule,
     RouteModule,
     ScheduleModule,
+    BusTypeModule,
     TypeOrmModule.forFeature([Company, Routes, Schedule]),
   ],
   controllers: [AppController],

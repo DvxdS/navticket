@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Routes } from '../routes/routeEntity';
+import { BusType } from '../bus/busEntity';
+import { types } from 'util';
 @Entity()
 export class Company {
   @PrimaryGeneratedColumn('uuid')
@@ -37,4 +39,7 @@ export class Company {
 
   @OneToMany(() => Routes, (route) => route.company)
   routes: Routes[];
+
+  @OneToMany(() => BusType, (busType) => busType.company, { cascade: true })
+  busTypes: BusType[];
 }

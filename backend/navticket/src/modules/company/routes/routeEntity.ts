@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany } from 'typeorm';
 import { Company } from '../companies/companyEntity';
 import { Schedule } from '../schedule/scheduleEntity';
 
@@ -34,6 +34,8 @@ export class Routes {
 
   @UpdateDateColumn()
   updatedAt: Date;
+  
   @OneToMany(() => Schedule, (schedule) => schedule.route)
   schedules: Schedule[];
+
 }
