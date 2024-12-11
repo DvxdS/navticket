@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useFormContext } from "../../../context/FormContext";
@@ -9,8 +9,11 @@ interface CompanyStepProps {
 }
 
 const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
-  console.log("coppany rendered ")
+  
   const { updateFormData } = useFormContext();
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formError, setFormError] = useState("");
 
   const formik = useFormik({
     initialValues: {
@@ -49,10 +52,22 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
         .required("Numéro de téléphone est requis."),
       officeLocation: Yup.string().required("Localisation de l'office est requise."),
     }),
-    onSubmit: (values) => {
-      updateFormData("companyDetails", values);
-      goNext();
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      setFormError("");
+      try {
+        await updateFormData("companyDetails", values);
+        goNext();
+      } catch (error) {
+        setFormError("An error occurred while submitting the form. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
     },
+      
+      
+      
+    
   });
 
   return (
@@ -210,16 +225,20 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
               Retour
             </button>
             <button
-              type="submit"
-              className={`py-3 px-6 rounded-md text-white transition duration-300 ${
-                formik.isValid && formik.dirty
-                  ? "bg-blue-600 hover:bg-blue-700"
-                  : "bg-gray-400 cursor-not-allowed"
-              }`}
-              disabled={!formik.isValid || !formik.dirty}
-            >
-              Continuer
-            </button>
+            type="submit"
+            className={`py-3 px-6 rounded-md text-white flex items-center justify-center transition duration-300 ${
+              formik.isValid && formik.dirty
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+            disabled={!formik.isValid || !formik.dirty || isSubmitting}
+          >
+            {isSubmitting ? (
+              <span className="loader spinner-border animate-spin"></span>
+            ) : (
+              "Continuer"
+            )}
+          </button>
           </div>
         </form>
       </div>

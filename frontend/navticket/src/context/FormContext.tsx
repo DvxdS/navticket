@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useMemo } from "react";
 
 interface CompanyDetails {
   plan: string; // Make sure it's always required
@@ -10,12 +10,11 @@ interface CompanyDetails {
   [key: string]: any;
 }
 
-
 interface RouteDetails {
   origin: string;
   destination: string;
   distance: number;
-  priceVIP : number;
+  priceVIP: number;
   priceStandard: number;
 }
 
@@ -25,7 +24,6 @@ interface ScheduleDetails {
   departureTime: string;
   arrivalTime: string;
   durationInHour: number;
-  price: number;
 }
 
 interface BusType {
@@ -44,26 +42,29 @@ interface FormState {
 interface FormContextValue {
   formData: FormState;
   updateFormData: (key: keyof FormState, value: any) => void;
-  updateNestedField: (
-    section: keyof FormState,
+  updateNestedField: <T extends keyof FormState>(
+    section: T,
     index: number,
-    fieldKey: string,
+    fieldKey: keyof FormState[T][number],
     fieldValue: any
   ) => void;
-  resetForm: () => void; // For resetting the form if needed
+  resetForm: () => void;
+  addNestedField: <T extends keyof FormState>(
+    section: T,
+    newField: FormState[T] extends Array<infer U> ? U : never
+  ) => void;
 }
 
 const FormContext = createContext<FormContextValue | undefined>(undefined);
 
 export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [formData, setFormData] = useState<FormState>({
-    companyDetails: { plan: "" },
+    companyDetails: { plan: "basic" },
     busType: [],
     routes: [],
     schedules: [],
   });
 
-  // General update function
   const updateFormData = (key: keyof FormState, value: any) => {
     if (key === "companyDetails") {
       setFormData((prev) => ({
@@ -75,15 +76,20 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  // Update nested fields (e.g., individual route/schedule)
-  const updateNestedField = (
-    section: keyof FormState,
+  const updateNestedField = <T extends keyof FormState>(
+    section: T,
     index: number,
-    fieldKey: string,
+    fieldKey: keyof FormState[T][number],
     fieldValue: any
   ) => {
     setFormData((prev) => {
-      const updatedSection = [...(prev[section] as any[])];
+      const sectionArray = prev[section] as Array<any>;
+      if (!sectionArray || !sectionArray[index]) {
+        console.error(`Index ${index} does not exist in section ${section}`);
+        return prev;
+      }
+
+      const updatedSection = [...sectionArray];
       updatedSection[index] = {
         ...updatedSection[index],
         [fieldKey]: fieldValue,
@@ -93,23 +99,40 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
-  // Reset the form (optional helper function)
+  const addNestedField = <T extends keyof FormState>(
+    section: T,
+    newField: FormState[T] extends Array<infer U> ? U : never
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [section]: [
+        ...(prev[section] as unknown as Array<FormState[T] extends Array<infer U> ? U : never>),
+        newField,
+      ],
+    }));
+  };
+
   const resetForm = () => {
     setFormData({
-      companyDetails: { plan: "" },
+      companyDetails: { plan: "basic" },
       busType: [],
       routes: [],
       schedules: [],
     });
   };
 
-  return (
-    <FormContext.Provider
-      value={{ formData, updateFormData, updateNestedField, resetForm }}
-    >
-      {children}
-    </FormContext.Provider>
+  const contextValue = useMemo(
+    () => ({
+      formData,
+      updateFormData,
+      updateNestedField,
+      resetForm,
+      addNestedField,
+    }),
+    [formData]
   );
+
+  return <FormContext.Provider value={contextValue}>{children}</FormContext.Provider>;
 };
 
 export const useFormContext = () => {

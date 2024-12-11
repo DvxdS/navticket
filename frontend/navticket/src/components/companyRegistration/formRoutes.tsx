@@ -35,7 +35,7 @@ const FormRoutes: React.FC = () => {
               path="company"
               element={
                 <CompanyStep
-                  goNext={() => goNext("/company-registration/routes")}
+                  goNext={() => goNext("/company-registration/bus-types")}
                   goBack={() => goBack("/company-registration/plan")}
                 />
               }
