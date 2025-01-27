@@ -53,6 +53,7 @@ interface FormContextValue {
     section: T,
     newField: FormState[T] extends Array<infer U> ? U : never
   ) => void;
+  getFormData: () => FormState; // Method to get all form data for review
 }
 
 const FormContext = createContext<FormContextValue | undefined>(undefined);
@@ -121,6 +122,9 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
+  // Method to get all form data for review
+  const getFormData = () => formData;
+
   const contextValue = useMemo(
     () => ({
       formData,
@@ -128,6 +132,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       updateNestedField,
       resetForm,
       addNestedField,
+      getFormData, // Provide the getter to the context
     }),
     [formData]
   );

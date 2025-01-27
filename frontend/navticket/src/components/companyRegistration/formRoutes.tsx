@@ -5,9 +5,11 @@ import CompanyStep from "./setps/companyStep";
 import RoutesStep from "./setps/routeStep";
 import BusTypeStep from "./setps/busTypeStep";
 import ScheduleStep from "./setps/scheduleStep";
+import ReviewStep from "./setps/rewiewStep";
 import { useNavigate } from "react-router-dom";
 import CompanyRegistrationForm from "./companyRegistrationForm";
 import { FormProvider } from "../../context/FormContext";
+
 
 const FormRoutes: React.FC = () => {
     const navigate = useNavigate();
@@ -65,9 +67,22 @@ const FormRoutes: React.FC = () => {
                   goNext={() => goNext("/company-registration/review")}
                   goBack={() => goBack("/company-registration/routes")}
                 />
+
               }
             />
+
+              <Route
+              path="review"
+              element={
+                <ReviewStep
+                  //goBack={() => goBack("/company-registration/routes")}
+                />
+
+              }
+            />
+            
           </Route>
+          
         </Routes>
       </FormProvider>
     );

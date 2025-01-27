@@ -15,8 +15,7 @@ interface ScheduleStepProps {
 }
 
 const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
-  const { updateFormData } = useFormContext();
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const { updateFormData, formData } = useFormContext();
 
   const formik = useFormik({
     initialValues: {
@@ -30,10 +29,15 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
         .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Format invalide (HH:mm)"),
       arrivalTime: Yup.string()
         .nullable()
-        .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Format invalide (HH:mm)"),
+        .matches(
+          /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+          "Format invalide (HH:mm)"
+        )
+        .notRequired(),
       durationInMinutes: Yup.number()
         .nullable()
-        .positive("Durée doit être un nombre positif."),
+        .positive("Durée doit être un nombre positif.")
+        .notRequired(),
     }),
     onSubmit: (values, { resetForm }) => {
       const newSchedule: Schedule = {
@@ -43,18 +47,20 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
           ? Number(values.durationInMinutes)
           : undefined,
       };
-      setSchedules([...schedules, newSchedule]);
+
+      // Add schedule directly to context
+      const updatedSchedules = [...(formData.schedules || []), newSchedule];
+      updateFormData("schedules", updatedSchedules);
       resetForm();
     },
   });
 
   const handleRemoveSchedule = (index: number) => {
-    const updatedSchedules = schedules.filter((_, i) => i !== index);
-    setSchedules(updatedSchedules);
+    const updatedSchedules = formData.schedules.filter((_, i) => i !== index);
+    updateFormData("schedules", updatedSchedules);
   };
 
   const handleContinue = () => {
-    updateFormData("schedules", schedules);
     goNext();
   };
 
@@ -79,6 +85,7 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
                   ? "border-red-500"
                   : "border-gray-300"
               }`}
+              aria-label="Heure de départ"
             />
             {formik.touched.departureTime && formik.errors.departureTime && (
               <p className="text-red-500 text-sm">{formik.errors.departureTime}</p>
@@ -100,6 +107,7 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
                   ? "border-red-500"
                   : "border-gray-300"
               }`}
+              aria-label="Heure d'arrivée"
             />
             {formik.touched.arrivalTime && formik.errors.arrivalTime && (
               <p className="text-red-500 text-sm">{formik.errors.arrivalTime}</p>
@@ -122,6 +130,7 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
                   ? "border-red-500"
                   : "border-gray-300"
               }`}
+              aria-label="Durée en minutes"
             />
             {formik.touched.durationInMinutes &&
               formik.errors.durationInMinutes && (
@@ -133,7 +142,12 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
 
           <button
             type="submit"
-            className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            disabled={!formik.isValid || !formik.values.departureTime}
+            className={`py-2 px-4 rounded-md text-white transition duration-300 ${
+              formik.isValid && formik.values.departureTime
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
           >
             Ajouter Horaire
           </button>
@@ -141,7 +155,7 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
 
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-4">Horaires ajoutés</h3>
-          {schedules.map((schedule, index) => (
+          {(formData.schedules || []).map((schedule: Schedule, index: number) => (
             <div
               key={index}
               className="flex justify-between items-center bg-gray-100 px-4 py-2 rounded-md mb-2"
@@ -162,6 +176,7 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
                 )}
               </div>
               <button
+                aria-label={`Supprimer l'horaire de départ ${schedule.departureTime}`}
                 className="text-red-500 hover:text-red-700"
                 onClick={() => handleRemoveSchedule(index)}
               >
@@ -181,11 +196,11 @@ const ScheduleStep: React.FC<ScheduleStepProps> = ({ goNext, goBack }) => {
           <button
             onClick={handleContinue}
             className={`py-3 px-6 rounded-md text-white transition duration-300 ${
-              schedules.length > 0
+              (formData.schedules || []).length > 0
                 ? "bg-blue-600 hover:bg-blue-700"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
-            disabled={schedules.length === 0}
+            disabled={(formData.schedules || []).length === 0}
           >
             Continuer
           </button>
