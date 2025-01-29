@@ -17,7 +17,7 @@ export class Schedule {
   @ManyToOne(() => Routes, (route) => route.schedules, { eager: true })
   route: Routes;
 
-  @ManyToOne(() => BusType, (busType) => busType.id, { eager: true })
+  @ManyToOne(() => BusType, (busType) => busType.schedules, { eager: true }) // Fix relationship
   busType: BusType;
 
   @Column('time')
@@ -28,7 +28,6 @@ export class Schedule {
 
   @Column('uuid', { default: () => 'uuid_generate_v4()' })
   scheduleGroup: string; // To group schedules for the same route
-
 
   @Column('int', { nullable: true })
   durationInHour: number; // Optional explicit travel duration

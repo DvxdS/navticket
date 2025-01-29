@@ -4,36 +4,36 @@ import { Schedule } from '../schedule/scheduleEntity';
 
 @Entity()
 export class Routes {
-    @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ length: 100 })
-  origin: string;  
+  origin: string;
 
   @Column({ length: 100 })
-  destination: string;  
+  destination: string;
 
-  @Column('float', {nullable : true})
-  priceVIP: number;  
-
-  @Column('float')
-  priceStandard
+  @Column('float', { nullable: true })
+  priceVIP: number;
 
   @Column('float')
-  distance
-  
+  priceStandard: number;
+
+  @Column('float')
+  distance: number;
+
+  @Column({ length: 100, unique: true }) // Add a unique route identifier
+  routeCode: string;
 
   @ManyToOne(() => Company, (company) => company.routes, { eager: true })
-  company: Company;  
-
+  company: Company;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-  
+
   @OneToMany(() => Schedule, (schedule) => schedule.route)
   schedules: Schedule[];
-
 }

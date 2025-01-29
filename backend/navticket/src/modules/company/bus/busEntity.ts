@@ -2,21 +2,22 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Up
 import { Company } from '../companies/companyEntity';
 import { Schedule } from '../schedule/scheduleEntity';
 @Entity()
+@Entity()
 export class BusType {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  type: string; // "Standard" or "VIP"
+  @Column({ enum: ['Standard', 'VIP', 'VVIP'] }) // Enforce allowed values
+  type: string;
 
   @Column()
-  capacity: number; // Number of seats
+  capacity: number;
 
   @Column({ nullable: true })
-  description: string; // Characteristics of the bus type
+  description: string;
 
   @ManyToOne(() => Company, (company) => company.busTypes, { onDelete: 'CASCADE' })
-  company: Company; // Each bus type belongs to a company
+  company: Company;
 
   @OneToMany(() => Schedule, (schedule) => schedule.busType)
   schedules: Schedule[];
