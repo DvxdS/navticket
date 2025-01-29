@@ -35,25 +35,20 @@ interface BusType {
 interface FormState {
   companyDetails: CompanyDetails;
   routes: RouteDetails[];
-  schedules: ScheduleDetails[];
+  schedules: { [routeId: string]: ScheduleDetails[] };
   busType: BusType[];
 }
 
 interface FormContextValue {
   formData: FormState;
   updateFormData: (key: keyof FormState, value: any) => void;
-  updateNestedField: <T extends keyof FormState>(
-    section: T,
-    index: number,
-    fieldKey: keyof FormState[T][number],
-    fieldValue: any
-  ) => void;
+  updateNestedField: (routeId: string, newSchedule: ScheduleDetails) => void;
   resetForm: () => void;
   addNestedField: <T extends keyof FormState>(
     section: T,
     newField: FormState[T] extends Array<infer U> ? U : never
   ) => void;
-  getFormData: () => FormState; // Method to get all form data for review
+  getFormData: () => FormState;
 }
 
 const FormContext = createContext<FormContextValue | undefined>(undefined);
@@ -63,43 +58,31 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     companyDetails: { plan: "basic" },
     busType: [],
     routes: [],
-    schedules: [],
+    schedules: {},
   });
 
+  // Updates form fields
   const updateFormData = (key: keyof FormState, value: any) => {
-    if (key === "companyDetails") {
-      setFormData((prev) => ({
-        ...prev,
-        companyDetails: { ...prev.companyDetails, ...value },
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [key]: value }));
-    }
-  };
-
-  const updateNestedField = <T extends keyof FormState>(
-    section: T,
-    index: number,
-    fieldKey: keyof FormState[T][number],
-    fieldValue: any
-  ) => {
     setFormData((prev) => {
-      const sectionArray = prev[section] as Array<any>;
-      if (!sectionArray || !sectionArray[index]) {
-        console.error(`Index ${index} does not exist in section ${section}`);
-        return prev;
+      if (key === "routes") {
+        return { ...prev, routes: [...prev.routes, value] }; // Append new route
       }
-
-      const updatedSection = [...sectionArray];
-      updatedSection[index] = {
-        ...updatedSection[index],
-        [fieldKey]: fieldValue,
-      };
-
-      return { ...prev, [section]: updatedSection };
+      return { ...prev, [key]: value };
     });
   };
 
+  // Updates schedules per route
+  const updateNestedField = (routeId: string, newSchedule: ScheduleDetails) => {
+    setFormData((prev) => ({
+      ...prev,
+      schedules: {
+        ...prev.schedules,
+        [routeId]: [...(prev.schedules[routeId] || []), newSchedule], // Append to specific route
+      },
+    }));
+  };
+
+  // Adds a new field to an array in the form
   const addNestedField = <T extends keyof FormState>(
     section: T,
     newField: FormState[T] extends Array<infer U> ? U : never
@@ -113,16 +96,16 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }));
   };
 
+  // Resets the form
   const resetForm = () => {
     setFormData({
       companyDetails: { plan: "basic" },
       busType: [],
       routes: [],
-      schedules: [],
+      schedules: {},
     });
   };
 
-  // Method to get all form data for review
   const getFormData = () => formData;
 
   const contextValue = useMemo(
@@ -132,7 +115,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       updateNestedField,
       resetForm,
       addNestedField,
-      getFormData, // Provide the getter to the context
+      getFormData,
     }),
     [formData]
   );
@@ -142,10 +125,8 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 export const useFormContext = () => {
   const context = useContext(FormContext);
-
   if (!context) {
     throw new Error("useFormContext must be used within a FormProvider");
   }
-
   return context;
 };
