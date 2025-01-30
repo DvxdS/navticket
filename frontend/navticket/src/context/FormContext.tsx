@@ -11,8 +11,10 @@ interface CompanyDetails {
 }
 
 interface RouteDetails {
+  id: string; // Add ID to route
   origin: string;
   destination: string;
+  routeCode: string,
   distance: number;
   priceVIP: number;
   priceStandard: number;
@@ -23,10 +25,11 @@ interface ScheduleDetails {
   busTypeId: string;
   departureTime: string;
   arrivalTime: string;
-  durationInHour: number;
+  durationInMinutes?: number;
 }
 
 interface BusType {
+  id: string; // Add ID to bus type
   type: string;
   capacity: string;
   description: string;
@@ -61,6 +64,8 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     schedules: {},
   });
 
+  const generateId = () => Math.random().toString(36).substr(2, 9); // Simple ID generator
+
   // Updates form fields
   const updateFormData = (key: keyof FormState, value: any) => {
     setFormData((prev) => {
@@ -87,13 +92,20 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     section: T,
     newField: FormState[T] extends Array<infer U> ? U : never
   ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [section]: [
-        ...(prev[section] as unknown as Array<FormState[T] extends Array<infer U> ? U : never>),
-        newField,
-      ],
-    }));
+    setFormData((prev) => {
+      if (section === "routes" || section === "busType") {
+        // Explicitly type `newField` as an object before spreading
+        const fieldWithId = { ...(newField as object), id: generateId() };
+        return {
+          ...prev,
+          [section]: [...(prev[section] as any), fieldWithId],
+        };
+      }
+      return {
+        ...prev,
+        [section]: [...(prev[section] as any), newField],
+      };
+    });
   };
 
   // Resets the form
