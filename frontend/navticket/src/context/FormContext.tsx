@@ -90,22 +90,12 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Adds a new field to an array in the form
   const addNestedField = <T extends keyof FormState>(
     section: T,
-    newField: FormState[T] extends Array<infer U> ? U : never
+    newField: Omit<FormState[T] extends Array<infer U> ? U : never, "id">
   ) => {
-    setFormData((prev) => {
-      if (section === "routes" || section === "busType") {
-        // Explicitly type `newField` as an object before spreading
-        const fieldWithId = { ...(newField as object), id: generateId() };
-        return {
-          ...prev,
-          [section]: [...(prev[section] as any), fieldWithId],
-        };
-      }
-      return {
-        ...prev,
-        [section]: [...(prev[section] as any), newField],
-      };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [section]: [...(prev[section] as any), { ...newField, id: generateId() }], // Temporary ID
+    }));
   };
 
   // Resets the form
