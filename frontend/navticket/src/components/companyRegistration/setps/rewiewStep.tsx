@@ -36,6 +36,9 @@ const ReviewStep: React.FC<{ goBack: () => void }> = ({ goBack }) => {
         <div className="mb-8">
           <h3 className="text-xl font-semibold mb-4">Company Details</h3>
           <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+          <p>
+              <strong>Plan:</strong> {formData.companyDetails.plan}
+            </p>
             <p>
               <strong>Name:</strong> {formData.companyDetails.name}
             </p>

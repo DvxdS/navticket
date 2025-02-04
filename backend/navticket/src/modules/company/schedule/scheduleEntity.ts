@@ -27,10 +27,10 @@ export class Schedule {
   arrivalTime: string;
 
   @Column('uuid', { default: () => 'uuid_generate_v4()' })
-  scheduleGroup: string; // To group schedules for the same route
+  scheduleGroup: string; 
 
   @Column('int', { nullable: true })
-  durationInHour: number; // Optional explicit travel duration
+  durationInHour: number; 
 
   @CreateDateColumn()
   createdAt: Date;

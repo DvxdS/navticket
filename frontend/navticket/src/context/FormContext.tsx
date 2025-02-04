@@ -67,14 +67,16 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const generateId = () => Math.random().toString(36).substr(2, 9); // Simple ID generator
 
   // Updates form fields
-  const updateFormData = (key: keyof FormState, value: any) => {
-    setFormData((prev) => {
-      if (key === "routes") {
-        return { ...prev, routes: [...prev.routes, value] }; // Append new route
-      }
-      return { ...prev, [key]: value };
-    });
+  const updateFormData = (section: keyof FormState, newData: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section], // Keep existing data
+        ...newData, // Merge new data
+      },
+    }));
   };
+  
 
   // Updates schedules per route
   const updateNestedField = (routeId: string, newSchedule: ScheduleDetails) => {

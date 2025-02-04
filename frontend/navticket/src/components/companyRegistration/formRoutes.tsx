@@ -75,7 +75,7 @@ const FormRoutes: React.FC = () => {
               path="review"
               element={
                 <ReviewStep
-                  //goBack={() => goBack("/company-registration/routes")}
+                  goBack={() => goBack("/company-registration/schedules")}
                 />
 
               }
