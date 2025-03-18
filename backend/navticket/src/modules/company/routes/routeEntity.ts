@@ -22,7 +22,7 @@ export class Routes {
   @Column('float')
   distance: number;
 
-  @Column({ length: 100, unique: true }) // Add a unique route identifier
+  @Column({ length: 100, unique: true }) 
   routeCode: string;
 
   @ManyToOne(() => Company, (company) => company.routes, { eager: true })

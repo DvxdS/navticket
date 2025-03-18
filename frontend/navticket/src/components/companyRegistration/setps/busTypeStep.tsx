@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+/*import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useFormContext } from "../../../context/FormContext";
+import { useRegistration} from "../../../context/FormContext";
 
 interface BusType {
   id: string; // Add ID to bus type
@@ -16,7 +16,7 @@ interface BusTypeStepProps {
 }
 
 const BusTypeStep: React.FC<BusTypeStepProps> = ({ goNext, goBack }) => {
-  const { addNestedField } = useFormContext();
+  const { updateMultipleFields } = useRegistration();
   const [busTypes, setBusTypes] = useState<BusType[]>([]);
 
   // Formik setup for form validation and handling
@@ -73,7 +73,7 @@ const BusTypeStep: React.FC<BusTypeStepProps> = ({ goNext, goBack }) => {
       </div>
 
       <div className="p-6 max-w-lg mx-auto border rounded-lg shadow-md bg-white space-y-6">
-        {/* Type Field */}
+        
         <div>
           <label
             htmlFor="type"
@@ -99,7 +99,7 @@ const BusTypeStep: React.FC<BusTypeStepProps> = ({ goNext, goBack }) => {
           )}
         </div>
 
-        {/* Capacity Field */}
+        
         <div>
           <label
             htmlFor="capacity"
@@ -121,7 +121,7 @@ const BusTypeStep: React.FC<BusTypeStepProps> = ({ goNext, goBack }) => {
           )}
         </div>
 
-        {/* Description Field */}
+        
         <div>
           <label
             htmlFor="description"
@@ -144,7 +144,7 @@ const BusTypeStep: React.FC<BusTypeStepProps> = ({ goNext, goBack }) => {
           )}
         </div>
 
-        {/* Add Button */}
+        
         <button
           type="submit"
           className="w-full py-3 px-6 bg-blue-600 text-white rounded-lg font-medium text-center hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -153,7 +153,7 @@ const BusTypeStep: React.FC<BusTypeStepProps> = ({ goNext, goBack }) => {
         </button>
       </div>
 
-      {/* Display Added Bus Types */}
+      
       {busTypes.length > 0 && (
         <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
           {busTypes.map((busType, index) => (
@@ -184,7 +184,7 @@ const BusTypeStep: React.FC<BusTypeStepProps> = ({ goNext, goBack }) => {
         </div>
       )}
 
-      {/* Navigation Buttons */}
+      
       <div className="flex justify-between mt-6">
         <button
           type="button"
@@ -210,4 +210,4 @@ const BusTypeStep: React.FC<BusTypeStepProps> = ({ goNext, goBack }) => {
   );
 };
 
-export default BusTypeStep;
+export default BusTypeStep; */

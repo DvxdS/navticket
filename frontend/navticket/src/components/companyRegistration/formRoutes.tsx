@@ -2,13 +2,13 @@ import React from "react";
 import { Routes, Route, } from "react-router-dom";
 import PlanStep from "./setps/planStep";
 import CompanyStep from "./setps/companyStep";
-import RoutesStep from "./setps/routeStep";
-import BusTypeStep from "./setps/busTypeStep";
-import ScheduleStep from "./setps/scheduleStep";
+//import RoutesStep from "./setps/routeStep";
+//import BusTypeStep from "./setps/busTypeStep";
+//import ScheduleStep from "./setps/scheduleStep";
 import ReviewStep from "./setps/rewiewStep";
 import { useNavigate } from "react-router-dom";
 import CompanyRegistrationForm from "./companyRegistrationForm";
-import { FormProvider } from "../../context/FormContext";
+import { RegistrationProvider} from "../../context/FormContext";
 
 
 const FormRoutes: React.FC = () => {
@@ -24,7 +24,7 @@ const FormRoutes: React.FC = () => {
     console.log("FormRoutes rendered");
   
     return (
-      <FormProvider>
+      <RegistrationProvider>
         <Routes>
           {/* Main route for company registration */}
           <Route path="/" element={<CompanyRegistrationForm />}>
@@ -37,45 +37,20 @@ const FormRoutes: React.FC = () => {
               path="company"
               element={
                 <CompanyStep
-                  goNext={() => goNext("/company-registration/bus-types")}
+                  goNext={() => goNext("/company-registration/review")}
                   goBack={() => goBack("/company-registration/plan")}
                 />
               }
             />
-             <Route
-            path="bus-types"
-            element={
-              <BusTypeStep
-                goNext={() => goNext("/company-registration/routes")}
-                goBack={() => goBack("/company-registration/company")}
-              />
-            }
-          />
-          <Route
-            path="routes"
-            element={
-              <RoutesStep
-                goNext={() => goNext("/company-registration/schedules")}
-                goBack={() => goBack("/company-registration/bus-types")}
-              />
-            }
-          />
-            <Route
-              path="schedules"
-              element={
-                <ScheduleStep
-                  goNext={() => goNext("/company-registration/review")}
-                  goBack={() => goBack("/company-registration/routes")}
-                />
-
-              }
-            />
+             
+          
+            
 
               <Route
               path="review"
               element={
                 <ReviewStep
-                  goBack={() => goBack("/company-registration/schedules")}
+                  goBack={() => goBack("/company-registration/company")}
                 />
 
               }
@@ -84,7 +59,7 @@ const FormRoutes: React.FC = () => {
           </Route>
           
         </Routes>
-      </FormProvider>
+      </RegistrationProvider>
     );
   };
   

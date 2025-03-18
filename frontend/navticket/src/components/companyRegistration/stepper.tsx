@@ -17,9 +17,9 @@ const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
   const stepIcons = [
     <FaCheckCircle />,
     <FaRegBuilding />,
-    <FaBus />, // New Bus Type Icon
-    <FaRegMap />,
-    <FaRegCalendarAlt />,
+    //<FaBus />, // New Bus Type Icon
+    //<FaRegMap />,
+    //<FaRegCalendarAlt />,
     <FaRegClipboard />,
   ];
 

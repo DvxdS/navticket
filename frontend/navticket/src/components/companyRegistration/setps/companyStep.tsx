@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useFormContext } from "../../../context/FormContext";
+import { useRegistration } from "../../../context/FormContext";
 
 interface CompanyStepProps {
   goNext: () => void;
@@ -10,7 +10,7 @@ interface CompanyStepProps {
 
 const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
   
-  const { updateFormData } = useFormContext();
+  const { updateMultipleFields  } = useRegistration();
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formError, setFormError] = useState("");
@@ -18,9 +18,9 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      officialDocs: null,
-      numberOfBusesVip: "",
-      numberOfBusesStandard: "",
+      officialDocs: [] as string[],
+      numberOfBusesVip: 0,
+      numberOfBusesStandard: 0,
       email: "",
       contactInfo: "",
       officeLocation: "",
@@ -56,7 +56,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
       setIsSubmitting(true);
       setFormError("");
       try {
-        await updateFormData("companyDetails", values);
+        await updateMultipleFields(values);
         goNext();
       } catch (error) {
         setFormError("An error occurred while submitting the form. Please try again.");

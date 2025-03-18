@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useFormContext } from "../../../context/FormContext";
+import { useRegistration } from "../../../context/FormContext";
 
 interface PlanStepProps {
   goNext: () => void;
 }
 
 const PlanStep: React.FC<PlanStepProps> = ({ goNext }) => {
-  const { updateFormData } = useFormContext();
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const { updateFormData, formData } = useRegistration();
+  const [selectedPlan, setSelectedPlan] = useState<string>(formData.plan || "basic");
 
   const plans = [
     { id: "basic", name: "Basic", price: "250.000 XOF", features: ["Vente de ticket", "Assistance de base"] },
@@ -31,7 +31,7 @@ const PlanStep: React.FC<PlanStepProps> = ({ goNext }) => {
 
   const handleContinue = () => {
     if (selectedPlan) {
-      updateFormData("companyDetails", { plan: selectedPlan });
+      updateFormData("plan", selectedPlan);
       goNext();
     }
   };

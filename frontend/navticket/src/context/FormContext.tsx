@@ -1,136 +1,85 @@
 import React, { createContext, useContext, useState, ReactNode, useMemo } from "react";
+import { string } from "yup";
 
-interface CompanyDetails {
-  plan: string; // Make sure it's always required
-  name?: string;
-  location?: string;
-  numberOfBusesVip?: number;
-  numberOfBusesStandard?: number;
-  OfficialDocs?: string[];
-  [key: string]: any;
+interface CompanyRegistrationData {
+  name: string;
+  officialDocs: string[] ;
+  numberOfBusesVip: number;
+  numberOfBusesStandard: number;
+  email: string;
+  contactInfo: string;
+  officeLocation: string;
+  plan: string;
 }
 
-interface RouteDetails {
-  id: string; // Add ID to route
-  origin: string;
-  destination: string;
-  routeCode: string,
-  distance: number;
-  priceVIP: number;
-  priceStandard: number;
-}
+interface RegistrationContextValue {
+  // State
+  formData: CompanyRegistrationData;
 
-interface ScheduleDetails {
-  routeId: string;
-  busTypeId: string;
-  departureTime: string;
-  arrivalTime: string;
-  durationInMinutes?: number;
-}
-
-interface BusType {
-  id: string; // Add ID to bus type
-  type: string;
-  capacity: string;
-  description: string;
-}
-
-interface FormState {
-  companyDetails: CompanyDetails;
-  routes: RouteDetails[];
-  schedules: { [routeId: string]: ScheduleDetails[] };
-  busType: BusType[];
-}
-
-interface FormContextValue {
-  formData: FormState;
-  updateFormData: (key: keyof FormState, value: any) => void;
-  updateNestedField: (routeId: string, newSchedule: ScheduleDetails) => void;
+  // Actions
+  updateFormData: <K extends keyof CompanyRegistrationData>(field: K, value: CompanyRegistrationData[K]) => void;
+  updateMultipleFields: (fields: Partial<CompanyRegistrationData>) => void;
   resetForm: () => void;
-  addNestedField: <T extends keyof FormState>(
-    section: T,
-    newField: FormState[T] extends Array<infer U> ? U : never
-  ) => void;
-  getFormData: () => FormState;
+  getFormData: () => CompanyRegistrationData;
 }
 
-const FormContext = createContext<FormContextValue | undefined>(undefined);
+// Initial state
+const initialState: CompanyRegistrationData = {
+  name: "",
+  officialDocs: [],
+  numberOfBusesVip: 0,
+  numberOfBusesStandard: 0,
+  email: "",
+  contactInfo: "",
+  officeLocation: "",
+  plan: "basic",
+};
 
-export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [formData, setFormData] = useState<FormState>({
-    companyDetails: { plan: "basic" },
-    busType: [],
-    routes: [],
-    schedules: {},
-  });
+const RegistrationContext = createContext<RegistrationContextValue | undefined>(undefined);
 
-  const generateId = () => Math.random().toString(36).substr(2, 9); // Simple ID generator
+export const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [formData, setFormData] = useState<CompanyRegistrationData>(initialState);
 
-  // Updates form fields
-  const updateFormData = (section: keyof FormState, newData: any) => {
+  // Update a single field with type safety
+  const updateFormData = <K extends keyof CompanyRegistrationData>(field: K, value: CompanyRegistrationData[K]) => {
     setFormData((prev) => ({
       ...prev,
-      [section]: {
-        ...prev[section], // Keep existing data
-        ...newData, // Merge new data
-      },
-    }));
-  };
-  
-
-  // Updates schedules per route
-  const updateNestedField = (routeId: string, newSchedule: ScheduleDetails) => {
-    setFormData((prev) => ({
-      ...prev,
-      schedules: {
-        ...prev.schedules,
-        [routeId]: [...(prev.schedules[routeId] || []), newSchedule], // Append to specific route
-      },
+      [field]: value,
     }));
   };
 
-  // Adds a new field to an array in the form
-  const addNestedField = <T extends keyof FormState>(
-    section: T,
-    newField: Omit<FormState[T] extends Array<infer U> ? U : never, "id">
-  ) => {
+  // Update multiple fields at once
+  const updateMultipleFields = (fields: Partial<CompanyRegistrationData>) => {
     setFormData((prev) => ({
       ...prev,
-      [section]: [...(prev[section] as any), { ...newField, id: generateId() }], // Temporary ID
+      ...fields,
     }));
   };
 
-  // Resets the form
+  // Reset the form
   const resetForm = () => {
-    setFormData({
-      companyDetails: { plan: "basic" },
-      busType: [],
-      routes: [],
-      schedules: {},
-    });
+    setFormData(initialState);
   };
 
-  const getFormData = () => formData;
-
-  const contextValue = useMemo(
+  // Use useMemo to ensure efficient re-renders and proper function reference
+  const value = useMemo(
     () => ({
       formData,
       updateFormData,
-      updateNestedField,
+      updateMultipleFields,
       resetForm,
-      addNestedField,
-      getFormData,
+      getFormData: () => formData, // Now always returns the latest formData
     }),
     [formData]
   );
 
-  return <FormContext.Provider value={contextValue}>{children}</FormContext.Provider>;
+  return <RegistrationContext.Provider value={value}>{children}</RegistrationContext.Provider>;
 };
 
-export const useFormContext = () => {
-  const context = useContext(FormContext);
-  if (!context) {
-    throw new Error("useFormContext must be used within a FormProvider");
+export const useRegistration = () => {
+  const context = useContext(RegistrationContext);
+  if (context === undefined) {
+    throw new Error("useRegistration must be used within a RegistrationProvider");
   }
   return context;
 };

@@ -1,8 +1,8 @@
 import React from "react";
-import { useFormContext } from "../../../context/FormContext";
+import { useRegistration } from "../../../context/FormContext";
 
 const ReviewStep: React.FC<{ goBack: () => void }> = ({ goBack }) => {
-  const { getFormData } = useFormContext();
+  const { getFormData } = useRegistration();
   const formData = getFormData();
 
   const handleSubmit = async () => {
@@ -36,125 +36,41 @@ const ReviewStep: React.FC<{ goBack: () => void }> = ({ goBack }) => {
         <div className="mb-8">
           <h3 className="text-xl font-semibold mb-4">Company Details</h3>
           <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-          <p>
-              <strong>Plan:</strong> {formData.companyDetails.plan}
+            <p>
+              <strong>Plan:</strong> {formData.plan}
             </p>
             <p>
-              <strong>Name:</strong> {formData.companyDetails.name}
+              <strong>Name:</strong> {formData.name}
             </p>
             <p>
-              <strong>Email:</strong> {formData.companyDetails.email}
+              <strong>Official Docs:</strong> 
+              {/* Display the file names, not the file objects */}
+              {formData.officialDocs.length > 0 ? (
+                <ul>
+                  {formData.officialDocs.map((file, index) => (
+                    <li key={index}>{file}</li>  
+                  ))}
+                </ul>
+              ) : (
+                <span>No documents uploaded</span>
+              )}
             </p>
             <p>
-              <strong>Contact Info:</strong> {formData.companyDetails.contactInfo}
+              <strong>Email:</strong> {formData.email}
             </p>
             <p>
-              <strong>Office Location:</strong> {formData.companyDetails.officeLocation}
+              <strong>Contact Info:</strong> {formData.contactInfo}
             </p>
             <p>
-              <strong>Number of VIP Buses:</strong> {formData.companyDetails.numberOfBusesVip}
+              <strong>Office Location:</strong> {formData.officeLocation}
             </p>
             <p>
-              <strong>Number of Standard Buses:</strong> {formData.companyDetails.numberOfBusesStandard}
+              <strong>Number of VIP Buses:</strong> {formData.numberOfBusesVip}
+            </p>
+            <p>
+              <strong>Number of Standard Buses:</strong> {formData.numberOfBusesStandard}
             </p>
           </div>
-        </div>
-
-        {/* Bus Types Section */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4">Bus Types</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {formData.busType.map((busType, index) => (
-              <div
-                key={index}
-                className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm"
-              >
-                <p>
-                  <strong>Type:</strong> {busType.type}
-                </p>
-                <p>
-                  <strong>Capacity:</strong> {busType.capacity}
-                </p>
-                <p>
-                  <strong>Description:</strong> {busType.description || "N/A"}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Routes Section */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4">Routes</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {formData.routes.map((route, index) => (
-              <div
-                key={index}
-                className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm"
-              >
-                <p>
-                  <strong>Origin:</strong> {route.origin}
-                </p>
-                <p>
-                  <strong>Destination:</strong> {route.destination}
-                </p>
-                <p>
-                  <strong>Distance:</strong> {route.distance} km
-                </p>
-                <p>
-                  <strong>Standard Price:</strong> {route.priceStandard} XOF
-                </p>
-                <p>
-                  <strong>VIP Price:</strong> {route.priceVIP} XOF
-                </p>
-                <p>
-                  <strong>Route Code:</strong> {route.routeCode}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Schedules Section */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4">Schedules</h3>
-          {Object.entries(formData.schedules).map(([routeId, schedules]) => {
-            const route = formData.routes.find((route) => route.id === routeId);
-            return (
-              <div key={routeId} className="mb-6">
-                <h4 className="text-lg font-semibold mb-2">
-                  {route?.origin} → {route?.destination}
-                </h4>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full bg-white border border-gray-200">
-                    <thead>
-                      <tr>
-                        <th className="px-4 py-2 border-b">Departure Time</th>
-                        <th className="px-4 py-2 border-b">Arrival Time</th>
-                        <th className="px-4 py-2 border-b">Duration (min)</th>
-                        <th className="px-4 py-2 border-b">Bus Type</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {schedules.map((schedule, index) => {
-                        const busType = formData.busType.find(
-                          (bus) => bus.id === schedule.busTypeId
-                        );
-                        return (
-                          <tr key={index}>
-                            <td className="px-4 py-2 border-b">{schedule.departureTime}</td>
-                            <td className="px-4 py-2 border-b">{schedule.arrivalTime}</td>
-                            <td className="px-4 py-2 border-b">{schedule.durationInMinutes}</td>
-                            <td className="px-4 py-2 border-b">{busType?.type}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            );
-          })}
         </div>
 
         {/* Action Buttons */}
