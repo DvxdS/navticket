@@ -274,7 +274,7 @@ export class AuthService {
         { secret: process.env.JWT_REFRESH_SECRET }
       );
 
-      // Optionally: Check token expiration and additional validations
+      
       return this.generateTokens(
         payload.sub, 
         payload.email, 
