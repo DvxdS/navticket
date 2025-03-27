@@ -11,6 +11,7 @@ import { ScheduleModule } from './modules/company/schedule/scheduleModule';
 import { BusType } from './modules/company/bus/busEntity';
 import { AuthModule } from './modules/auth/authModule';
 import { BusTypeModule } from './modules/company/bus/dto/busModule';
+import { UploadModule } from './modules/upload/upload.module';
 
 
 
@@ -31,6 +32,7 @@ import { BusTypeModule } from './modules/company/bus/dto/busModule';
     RouteModule,
     ScheduleModule,
     BusTypeModule,
+    UploadModule,
     TypeOrmModule.forFeature([Company, Routes, Schedule]),
   ],
   controllers: [AppController],

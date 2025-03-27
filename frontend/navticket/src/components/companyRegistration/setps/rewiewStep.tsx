@@ -44,11 +44,10 @@ const ReviewStep: React.FC<{ goBack: () => void }> = ({ goBack }) => {
             </p>
             <p>
               <strong>Official Docs:</strong> 
-              {/* Display the file names, not the file objects */}
-              {formData.officialDocs.length > 0 ? (
+              {formData.officialDocs && formData.officialDocs.length > 0 ? (
                 <ul>
                   {formData.officialDocs.map((file, index) => (
-                    <li key={index}>{file}</li>  
+                    <li key={index}>{file.name}</li>  
                   ))}
                 </ul>
               ) : (

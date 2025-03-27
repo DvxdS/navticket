@@ -1,11 +1,22 @@
+// src/modules/auth/auth.module.ts
 import { Module } from '@nestjs/common';
-import { AuthController } from './authController';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './authService';
-import { SupabaseService } from 'src/config/supabase';
+import { AuthController } from './authController';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { SupabaseModule } from 'src/config/supabase.module';
 
 @Module({
-    controllers: [AuthController],
-    providers: [AuthService, SupabaseService],
-    exports: [AuthService],
-  })
-  export class AuthModule {}
+  imports: [
+    SupabaseModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' }
+    })
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy]
+})
+export class AuthModule {}

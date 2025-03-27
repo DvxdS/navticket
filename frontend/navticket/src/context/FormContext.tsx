@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode, useMemo } from "react";
-import { string } from "yup";
 
 interface CompanyRegistrationData {
   name: string;
-  officialDocs: string[] ;
+  officialDocs: File[]; // Changed from string[] to File[]
   numberOfBusesVip: number;
   numberOfBusesStandard: number;
   email: string;
@@ -26,7 +25,7 @@ interface RegistrationContextValue {
 // Initial state
 const initialState: CompanyRegistrationData = {
   name: "",
-  officialDocs: [],
+  officialDocs: [], // Updated type
   numberOfBusesVip: 0,
   numberOfBusesStandard: 0,
   email: "",
@@ -44,7 +43,9 @@ export const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const updateFormData = <K extends keyof CompanyRegistrationData>(field: K, value: CompanyRegistrationData[K]) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: field === "officialDocs" && value instanceof FileList
+        ? Array.from(value) // Convert FileList to File[]
+        : value,
     }));
   };
 
@@ -52,7 +53,12 @@ export const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const updateMultipleFields = (fields: Partial<CompanyRegistrationData>) => {
     setFormData((prev) => ({
       ...prev,
-      ...fields,
+      ...Object.fromEntries(
+        Object.entries(fields).map(([key, value]) => [
+          key,
+          key === "officialDocs" && value instanceof FileList ? Array.from(value) : value,
+        ])
+      ),
     }));
   };
 
@@ -68,7 +74,7 @@ export const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ childr
       updateFormData,
       updateMultipleFields,
       resetForm,
-      getFormData: () => formData, // Now always returns the latest formData
+      getFormData: () => formData, // Always returns the latest formData
     }),
     [formData]
   );

@@ -18,7 +18,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      officialDocs: [] as string[],
+      officialDocs: [],
       numberOfBusesVip: 0,
       numberOfBusesStandard: 0,
       email: "",
@@ -27,16 +27,11 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Nom de l'entreprise est requis."),
-      officialDocs: Yup.mixed()
+      officialDocs: Yup.mixed<File>()
         .required("Document officiel est requis.")
         .test("fileType", "Format non supporté (PDF ou Word uniquement)", (value) => {
           if (!value) return false;
-          const file = value as File;
-          return [
-            "application/pdf",
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          ].includes(file.type);
+          return ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(value.type);
         }),
       numberOfBusesVip: Yup.number()
         .typeError("Nombre de bus VIP doit être un nombre.")
@@ -103,6 +98,7 @@ const CompanyStep: React.FC<CompanyStepProps> = ({ goNext, goBack }) => {
             </label>
             <input
               id="officialDocs"
+              multiple
               type="file"
               accept=".pdf, .doc, .docx"
               onChange={(event) => {
