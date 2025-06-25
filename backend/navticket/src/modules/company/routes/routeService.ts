@@ -61,14 +61,14 @@ export class RouteService {
       throw new NotFoundException(`Route with ID ${id} not found`);
     }
 
-    // Merge the updates into the existing route object
+         
     Object.assign(route, updateRouteDto);
 
-    // Save the updated route
+    
     return await this.routeRepository.save(route);
   }
 
-  // Method to delete a route by ID
+  
   async deleteRoute(id: number): Promise<void> {
     const result = await this.routeRepository.delete(id);
     if (result.affected === 0) {
